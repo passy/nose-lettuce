@@ -33,7 +33,7 @@ class LettucePlugin(Plugin):
                           help="Set the verbosity for the lettuce runner.",
                           dest='lettuce_verbosity')
 
-        parser.add_option('--scenarios',
+        parser.add_option('--lettuce-scenarios',
                           help="Comma seperated list of scenarios to run.",
                           dest="lettuce_scenarios")
 
