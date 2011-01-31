@@ -45,18 +45,25 @@ class LettucePlugin(Plugin):
         if options.lettuce_path:
             self._base_path = options.lettuce_path
         else:
-            self._base_path = os.path.join(self.conf.workingDir, "features")
+            self._base_path = os.path.join(conf.workingDir, "features")
 
         conf.lettuce_verbosity = options.lettuce_verbosity
         conf.lettuce_scenarios = options.lettuce_scenarios
+
         Plugin.configure(self, options, conf)
 
+
     def prepareTestRunner(self, runner):
-        """Create and run the lettuce runner."""
+        """Create and run the lettuce runner. This does not provide a real
+        test runner for lettuce tests, but runs the lettuce test runner. So,
+        there are no real test results and """
 
         lrunner = lettuce.Runner(self._base_path,
                                  verbosity=self.conf.lettuce_verbosity,
                                  scenarios=self.conf.lettuce_scenarios)
-        lrunner.run()
+        result = lrunner.run()
+        if not result or result.steps != result.steps_passed:
+            # I really don't have any idea how to handle this properly.
+            raise RuntimeError("Lettuce test suite failed")
 
         return runner
